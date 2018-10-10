@@ -1,4 +1,4 @@
-package com.nklight.ultsub.floatbuble;
+package com.nklight.ultsub.FloatBuble;
 
 public interface FloatingBubbleTouchListener {
 

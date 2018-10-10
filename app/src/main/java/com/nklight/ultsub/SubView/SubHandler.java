@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,6 +30,7 @@ public class SubHandler extends Handler {
     private Long offsetoffsetMillis;
     private ArrayList<Subtitle> subtitles = new ArrayList<>();
     private ArrayList<Timestamp> startingTimestamps = new ArrayList<>();
+    private State state;
 
     interface SubHandlerListener {
         void onTextChange(String text);
@@ -86,5 +88,23 @@ public class SubHandler extends Handler {
         if (inputStream == null && mListener == null) return;
 
 
+    }
+
+    private void init() {
+        State state = new State(0L, new ArrayList<Subtitle>(), new ArrayList<Timestamp>());
+        this.state = state;
+        InputStream inputStream ;
+    }
+}
+
+class State {
+    public Long offsetMillis;
+    public List<Subtitle> subtitles;
+    public List<Timestamp> startingTimestamps;
+
+    public State(Long offsetMillis, List<Subtitle> subtitles, List<Timestamp> startingTimestamps) {
+        this.offsetMillis = offsetMillis;
+        this.subtitles = subtitles;
+        this.startingTimestamps = startingTimestamps;
     }
 }

@@ -1,4 +1,4 @@
-package com.nklight.ultsub.floatbuble;
+package com.nklight.ultsub.FloatBuble;
 
 import android.app.Activity;
 import android.content.Context;

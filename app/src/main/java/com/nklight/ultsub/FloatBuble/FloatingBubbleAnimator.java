@@ -1,4 +1,4 @@
-package com.nklight.ultsub.floatbuble;
+package com.nklight.ultsub.FloatBuble;
 
 import android.animation.ValueAnimator;
 import android.util.Log;

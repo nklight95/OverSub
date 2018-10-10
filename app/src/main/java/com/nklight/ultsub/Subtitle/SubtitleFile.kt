@@ -1,5 +1,6 @@
 package com.nklight.ultsub.Subtitle
 
+import com.nklight.ultsub.Utils.LogUtils
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -30,7 +31,10 @@ class SubtitleFile {
 
             /* Read the Timestamps from the file. */
             val timestamps = scanner.nextLine().split(" --> ".toRegex())
-            if (timestamps.size != 2) throw InvalidTimestampFormatException()
+            if (timestamps.size != 2) {
+                LogUtils.d("InvalidTimestampFormatException", "InvalidTimestampFormatException")
+//                throw InvalidTimestampFormatException()
+            }
 
             val startTime = Timestamp(timestamps[0])
             val endTime = Timestamp(timestamps[1])

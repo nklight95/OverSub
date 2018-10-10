@@ -1,6 +1,7 @@
 package com.nklight.ultsub.Subtitle
 
 import android.annotation.SuppressLint
+import com.nklight.ultsub.Utils.LogUtils
 
 class Timestamp : Comparable<Timestamp> {
 
@@ -24,7 +25,10 @@ class Timestamp : Comparable<Timestamp> {
     @Throws(InvalidTimestampFormatException::class)
     constructor(time: CharSequence) {
         val topParts = time.split(",".toRegex()).dropLastWhile { it.isEmpty() }
-        if (topParts.size != 2) throw InvalidTimestampFormatException()
+        if (topParts.size != 2)  {
+            LogUtils.d("InvalidTimestampFormatException", "InvalidTimestampFormatException")
+            throw InvalidTimestampFormatException()
+        }
         val parts = topParts[0].split(":".toRegex()).dropLastWhile { it.isEmpty() }
         if (parts.size != 3) throw InvalidTimestampFormatException()
 

@@ -23,7 +23,7 @@
             android:enabled="true"
             android:exported="false"/>
         <service
-            android:name=".floatbuble.FloatingBubbleService"
+            android:name=".FloatBuble.FloatingBubbleService"
             android:enabled="true"
             android:exported="false"/>
         <service android:name=".UltSubService" />

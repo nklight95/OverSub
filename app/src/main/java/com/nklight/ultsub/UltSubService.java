@@ -4,8 +4,8 @@ import android.graphics.Color;
 import android.view.Gravity;
 
 import com.nklight.ultsub.SubView.SubView;
-import com.nklight.ultsub.floatbuble.FloatingBubbleConfig;
-import com.nklight.ultsub.floatbuble.FloatingBubbleService;
+import com.nklight.ultsub.FloatBuble.FloatingBubbleConfig;
+import com.nklight.ultsub.FloatBuble.FloatingBubbleService;
 
 public class UltSubService extends FloatingBubbleService {
     @Override
