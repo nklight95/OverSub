@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                     Uri.parse("package:$packageName"))
             startActivityForResult(intent, CODE_DRAW_OVER_OTHER_APP_PERMISSION)
         } else {
-            initialView()
+            initializeViewOld()
         }
     }
 

@@ -18,10 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service
-            android:name=".PlayService"
-            android:enabled="true"
-            android:exported="false"/>
+        <!--<service-->
+            <!--android:name=".PlayService"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="false"/>-->
         <service
             android:name=".FloatBuble.FloatingBubbleService"
             android:enabled="true"

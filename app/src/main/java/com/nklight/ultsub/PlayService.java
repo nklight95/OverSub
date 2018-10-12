@@ -10,7 +10,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 
 public class PlayService extends Service {
     private WindowManager mWindowManager;
@@ -44,13 +43,13 @@ public class PlayService extends Service {
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mWindowManager.addView(mChatHeadView, params);
 
-        Button btnClose = mChatHeadView.findViewById(R.id.button);
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopSelf();
-            }
-        });
+//        Button btnClose = mChatHeadView.findViewById(R.id.button);
+//        btnClose.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                stopSelf();
+//            }
+//        });
     }
 
     private void initView() {

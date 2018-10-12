@@ -33,7 +33,7 @@ public class UltSubService extends FloatingBubbleService {
                 .physicsEnabled(true)
 
                 // The color of background of the layout
-                .expandableColor(Color.WHITE)
+                .expandableColor(Color.TRANSPARENT)
 
                 // The color of the triangular layout
                 .triangleColor(Color.GREEN)
