@@ -21,10 +21,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.nklight.ultsub.R;
+import com.nklight.ultsub.Utils.LogUtils;
 
 public class FloatingBubbleService extends Service {
 
     protected static final String TAG = FloatingBubbleService.class.getSimpleName();
+//    private static final String BROADCAST_CONFIG_CHANGED = "android.intent.action.CONFIGURATION_CHANGED";
 
     // Constructor Variable
     protected FloatingBubbleLogger logger;
@@ -55,6 +57,9 @@ public class FloatingBubbleService extends Service {
     public void onCreate() {
         super.onCreate();
         logger = new FloatingBubbleLogger().setDebugEnabled(true).setTag(TAG);
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(BROADCAST_CONFIG_CHANGED);
+//        this.registerReceiver(mBroadcastReceiver, filter);
     }
 
     @Override
@@ -86,6 +91,7 @@ public class FloatingBubbleService extends Service {
     public void onDestroy() {
         super.onDestroy();
         logger.log("onDestroy");
+//        this.unregisterReceiver(mBroadcastReceiver);
         removeAllViews();
     }
 
@@ -113,6 +119,57 @@ public class FloatingBubbleService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        LogUtils.d(TAG, "onConfigurationChanged");
+//        windowSize.x = newConfig.screenWidthDp;
+//        windowSize.y = newConfig.screenHeightDp;
+//
+//        configView(newConfig);
+    }
+
+    protected void configView(Configuration configuration) {
+        if (config == null) config = getConfig();
+        int iconSize = dpToPixels(config.getBubbleIconDp());
+        int bottomMargin = getExpandableViewBottomMargin();
+
+        windowManager.getDefaultDisplay().getSize(windowSize);
+
+        // Setting up the Remove Bubble View setup
+        removeBubbleParams.x = (windowSize.x - removeBubbleParams.width) / 2;
+        removeBubbleParams.y = windowSize.y - removeBubbleParams.height - bottomMargin;
+
+        removeBubbleView.setLayoutParams(removeBubbleParams);
+
+        // Setting up the Expandable View setup
+        expandableParams.height = windowSize.y - iconSize - bottomMargin;
+        expandableParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+
+        expandableView.setLayoutParams(expandableParams);
+
+        //
+        physics = new FloatingBubblePhysics.Builder()
+                .sizeX(windowSize.x)
+                .sizeY(windowSize.y)
+                .bubbleView(bubbleView)
+                .config(config)
+                .windowManager(windowManager)
+                .build();
+
+        touch = new FloatingBubbleTouch.Builder()
+                .sizeX(windowSize.x)
+                .sizeY(windowSize.y)
+                .listener(getTouchListener())
+                .physics(physics)
+                .bubbleView(bubbleView)
+                .removeBubbleSize(dpToPixels(config.getRemoveBubbleIconDp()))
+                .windowManager(windowManager)
+                .expandableView(expandableView)
+                .removeBubbleView(removeBubbleView)
+                .config(config)
+                .marginBottom(getExpandableViewBottomMargin())
+                .padding(dpToPixels(config.getPaddingDp()))
+                .build();
+
+        bubbleView.setOnTouchListener(touch);
 
     }
 
@@ -348,4 +405,23 @@ public class FloatingBubbleService extends Service {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         return Math.round(dpSize * (displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
+
+//    public BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent myIntent) {
+//
+//            if (myIntent.getAction().equals(BROADCAST_CONFIG_CHANGED)) {
+//
+//                LogUtils.d(TAG, "received->" + BROADCAST_CONFIG_CHANGED);
+//
+//
+//                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                    // it's Landscape
+//                    LogUtils.d(TAG, "LANDSCAPE");
+//                } else {
+//                    LogUtils.d(TAG, "PORTRAIT");
+//                }
+//            }
+//        }
+//    };
 }

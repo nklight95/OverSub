@@ -1,11 +1,12 @@
 package com.nklight.ultsub;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.view.Gravity;
 
-import com.nklight.ultsub.SubView.SubView;
 import com.nklight.ultsub.FloatBuble.FloatingBubbleConfig;
 import com.nklight.ultsub.FloatBuble.FloatingBubbleService;
+import com.nklight.ultsub.SubView.SubView;
 
 public class UltSubService extends FloatingBubbleService {
     @Override
@@ -49,5 +50,12 @@ public class UltSubService extends FloatingBubbleService {
 
                 // Building
                 .build();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+//        stopSelf();
+//        startService(new Intent(this, UltSubService.class));
     }
 }

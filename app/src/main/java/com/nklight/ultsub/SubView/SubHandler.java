@@ -90,8 +90,9 @@ public class SubHandler extends Handler {
 
     }
 
-    public void configTime(boolean addTime, int timeValue) {
-
+    public void configTime(boolean addTime, int timeValueInMillis) {
+        this.state.offsetMillis = addTime ?
+                state.offsetMillis - timeValueInMillis : state.offsetMillis + timeValueInMillis;
     }
 
     public void start() {

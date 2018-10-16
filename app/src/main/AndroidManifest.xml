@@ -3,6 +3,7 @@
     package="com.nklight.ultsub">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -19,14 +20,18 @@
             </intent-filter>
         </activity>
         <!--<service-->
-            <!--android:name=".PlayService"-->
+        <!--android:name=".PlayService"-->
+        <!--android:enabled="true"-->
+        <!--android:exported="false"/>-->
+        <!--<service-->
+            <!--android:name=".FloatBuble.FloatingBubbleService"-->
             <!--android:enabled="true"-->
-            <!--android:exported="false"/>-->
-        <service
-            android:name=".FloatBuble.FloatingBubbleService"
-            android:enabled="true"
-            android:exported="false"/>
-        <service android:name=".UltSubService" />
+            <!--android:exported="false" />-->
+        <service android:name=".UltSubService">
+            <intent-filter>
+                <action android:name="android.intent.action.CONFIGURATION_CHANGED" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

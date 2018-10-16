@@ -8,4 +8,8 @@
     <string name="subtitle_text">Subtitle text</string>
     <string name="speedLabel">Speed:</string>
     <string name="open_file">Open Srt File</string>
+    <string name="paused">Paused</string>
+    <string name="playing">Playing</string>
+    <string name="_0_5">+0.5</string>
+    <string name="__0_5">-0.5</string>
 </resources>
