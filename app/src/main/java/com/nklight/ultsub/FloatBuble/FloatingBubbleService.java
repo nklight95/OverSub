@@ -120,10 +120,10 @@ public class FloatingBubbleService extends Service {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         LogUtils.d(TAG, "onConfigurationChanged");
-//        windowSize.x = newConfig.screenWidthDp;
-//        windowSize.y = newConfig.screenHeightDp;
-//
-//        configView(newConfig);
+        windowSize.x = newConfig.screenWidthDp;
+        windowSize.y = newConfig.screenHeightDp;
+
+        configView(newConfig);
     }
 
     protected void configView(Configuration configuration) {

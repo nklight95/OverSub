@@ -13,13 +13,13 @@ public class UltSubService extends FloatingBubbleService {
     protected FloatingBubbleConfig getConfig() {
         return new FloatingBubbleConfig.Builder()
                 // Set the drawable for the bubble
-                .bubbleIcon(getDrawable(R.drawable.img_sub))
+                .bubbleIcon(getDrawable(R.drawable.ic_sub_round))
 
                 // Set the drawable for the remove bubble
                 .removeBubbleIcon(getDrawable(R.drawable.triangle_icon))
 
                 // Set the size of the bubble in dp
-                .bubbleIconDp(35)
+                .bubbleIconDp(45)
 
                 // Set the size of the remove bubble in dp
                 .removeBubbleIconDp(52)

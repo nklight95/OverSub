@@ -1,9 +1,10 @@
 package com.nklight.ultsub.FloatBuble;
 
 import android.animation.ValueAnimator;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.nklight.ultsub.Utils.LogUtils;
 
 public class FloatingBubbleAnimator {
 
@@ -49,7 +50,7 @@ public class FloatingBubbleAnimator {
 
                     windowManager.updateViewLayout(bubbleView, bubbleParams);
                 } catch (Exception exception) {
-                    Log.e(FloatingBubbleAnimator.class.getSimpleName(), exception.getMessage());
+                    LogUtils.e(FloatingBubbleAnimator.class.getSimpleName(), exception.getMessage());
                 }
             }
         });

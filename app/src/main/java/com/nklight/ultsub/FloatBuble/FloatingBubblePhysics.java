@@ -1,9 +1,10 @@
 package com.nklight.ultsub.FloatBuble;
 
 import android.graphics.Point;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.nklight.ultsub.Utils.LogUtils;
 
 public class FloatingBubblePhysics extends DefaultFloatingBubbleTouchListener {
 
@@ -50,7 +51,7 @@ public class FloatingBubblePhysics extends DefaultFloatingBubbleTouchListener {
     @Override
     public void onUp(float x, float y) {
         addSelectively(x, y);
-        Log.d(FloatingBubblePhysics.class.getSimpleName(), previous.toString());
+        LogUtils.d(FloatingBubblePhysics.class.getSimpleName(), previous.toString());
 
         if (previous[0] == null) {
             moveToCorner();

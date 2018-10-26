@@ -93,6 +93,12 @@ public class SubHandler extends Handler {
     public void configTime(boolean addTime, int timeValueInMillis) {
         this.state.offsetMillis = addTime ?
                 state.offsetMillis - timeValueInMillis : state.offsetMillis + timeValueInMillis;
+        if (!state.toggleFollow.isChecked()) {
+            Timestamp timestamp = Timestamp.Companion.fromTotalMillis(System.currentTimeMillis() - state.offsetMillis);
+            timeLabel = timestamp.compile();
+            state.timeLabel = timeLabel;
+            mListener.onTextChange("", timeLabel);
+        }
     }
 
     public void start() {

@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.nklight.ultsub.Utils.LogUtils;
 
 public class PlayService extends Service {
     private WindowManager mWindowManager;
@@ -18,14 +19,14 @@ public class PlayService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d("service", "bind");
+        LogUtils.d("service", "bind");
         return null;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("service", "create");
+        LogUtils.d("service", "create");
         mChatHeadView = LayoutInflater.from(this).inflate(R.layout.layout_full, null);
 
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
@@ -63,7 +64,7 @@ public class PlayService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("service", "destroy");
+        LogUtils.d("service", "destroy");
         if (mChatHeadView != null) mWindowManager.removeView(mChatHeadView);
     }
 

@@ -8,4 +8,7 @@
     <color name="colorAccent">#ffffaa</color>
     <color name="colorBackground">#111111</color>
     <color name="colorButton">#777777</color>
+
+    <color name="light_blue">#366284</color>
+    <color name="light_white">#ccffffff</color>
 </resources>

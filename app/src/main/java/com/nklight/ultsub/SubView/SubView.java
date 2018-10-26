@@ -1,6 +1,9 @@
 package com.nklight.ultsub.SubView;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -8,7 +11,9 @@ import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -19,6 +24,8 @@ import com.nklight.ultsub.Subtitle.Timestamp;
 import com.nklight.ultsub.Utils.CompoundViewHelper;
 import com.nklight.ultsub.Utils.DownloadCallback;
 import com.nklight.ultsub.Utils.DownloadFile;
+import com.nklight.ultsub.Utils.DownloadWithUnzip;
+import com.nklight.ultsub.Utils.FileUtils;
 import com.nklight.ultsub.Utils.LogUtils;
 import com.nklight.ultsub.Utils.Utils;
 
@@ -29,7 +36,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubView extends CompoundViewHelper.ConstraintLayout implements SubHandler.SubHandlerListener {
+public class SubView extends CompoundViewHelper.ConstraintLayout implements SubHandler.SubHandlerListener, DownloadWithUnzip.OnDownloadStatusListener {
 
     private Context mContext;
     private String timeLabel;
@@ -41,8 +48,12 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
     private TextView tvTime;
     private Button btnBackWard;
     private Button btnForward;
+    private Button btnLoad;
     private ConstraintLayout parentLayout;
     private ConstraintLayout containerButton;
+    private ProgressDialog mProgressDialog;
+    private AlertDialog mLinkDialog;
+
 
     public SubView(Context context) {
         super(context);
@@ -88,6 +99,7 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
         btnForward = findViewById(R.id.btnForward);
         tvSub = findViewById(R.id.tvSub);
         btnStart = findViewById(R.id.btnStart);
+        btnLoad = findViewById(R.id.btnLoad);
         tvTime = findViewById(R.id.textView2);
         parentLayout = findViewById(R.id.parent);
         containerButton = findViewById(R.id.buttonContainer);
@@ -117,11 +129,103 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
                 mHandler.configTime(true, 500);
             }
         });
+        btnLoad.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openInputLinkDialog();
+            }
+        });
+    }
+
+    private void createInputLinkDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Input Link");
+        final EditText input = new EditText(mContext);
+        builder.setView(input);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                downloadAndUnzip(input.getText().toString());
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        mLinkDialog = builder.create();
+        mLinkDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+    }
+
+    private void openInputLinkDialog() {
+        createInputLinkDialog();
+        this.post(new Runnable() {
+            @Override
+            public void run() {
+                mLinkDialog.show();
+            }
+        });
+    }
+
+    private void downloadAndUnzip(String link) {
+        DownloadWithUnzip.FileDownloader downloader = DownloadWithUnzip.FileDownloader.getInstance(createDownloadRequest(link), SubView.this);
+        downloader.download(mContext);
+    }
+
+
+    private void setDialog(final boolean isShow) {
+        if (mProgressDialog == null) createProgressDialog();
+        this.post(new Runnable() {
+            @Override
+            public void run() {
+                if (isShow) {
+                    mProgressDialog.show();
+                } else {
+                    mProgressDialog.dismiss();
+                }
+            }
+        });
+    }
+
+    private void setDialog(final boolean isShow, final int percent) {
+        if (mProgressDialog == null) createProgressDialog();
+        this.post(new Runnable() {
+            @Override
+            public void run() {
+                if (isShow) {
+                    mProgressDialog.show();
+                } else {
+                    mProgressDialog.dismiss();
+                }
+                mProgressDialog.setProgress(percent);
+            }
+        });
+    }
+
+    private void setDialogPercent(final int percent) {
+        if (mProgressDialog == null) createProgressDialog();
+        this.post(new Runnable() {
+            @Override
+            public void run() {
+                mProgressDialog.setProgress(percent);
+            }
+        });
+    }
+
+
+    private void createProgressDialog() {
+        mProgressDialog = new ProgressDialog(mContext);
+        mProgressDialog.setTitle("Downloading");
+        mProgressDialog.setMax(100);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
     }
 
 
     @Override
-    public void onTextChange(final String text,final String time) {
+    public void onTextChange(final String text, final String time) {
         this.post(new Runnable() {
             @Override
             public void run() {
@@ -144,7 +248,7 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
     }
 
     @Override
-    public void onTextChange(final List<String> texts,final String time) {
+    public void onTextChange(final List<String> texts, final String time) {
         this.post(new Runnable() {
             @Override
             public void run() {
@@ -156,6 +260,7 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
     }
 
     private void getSubFromUrl(String url) {
+        setDialog(true);
         DownloadFile downLoadFile = new DownloadFile(mContext, new DownloadCallback() {
             @Override
             public void onDownload(File file) {
@@ -166,14 +271,57 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
                     e.printStackTrace();
                     onError("Can't load subtitle!");
                 }
+                setDialog(false);
             }
 
             @Override
             public void onFail(Exception e) {
                 LogUtils.d("DownloadError", e.getMessage());
                 onError("Can't load subtitle!");
+                setDialog(false);
+            }
+
+            @Override
+            public void onProgressUpdate(String percent) {
+                setDialogPercent(Integer.valueOf(percent));
             }
         });
-        downLoadFile.execute(url, "sub.srt");
+        downLoadFile.execute(url, "sub");
+    }
+
+    private DownloadWithUnzip.DownloadRequest createDownloadRequest(String link) {
+        String path = FileUtils.getDataDir(mContext).getAbsolutePath();
+        String fileName = "subZ";
+        File file = new File(path, fileName);
+        String localPath = file.getAbsolutePath();
+        String unzipPath = FileUtils.getDataDir(mContext, "ExtractSub").getAbsolutePath();
+        DownloadWithUnzip.DownloadRequest result = new DownloadWithUnzip.DownloadRequest(link, localPath);
+        result.setRequiresUnzip(true);
+        result.setDeleteZipAfterExtract(false);
+        result.setUnzipAtFilePath(unzipPath);
+        return result;
+    }
+
+    @Override
+    public void onDownloadStarted() {
+        setDialog(true, 0);
+    }
+
+    @Override
+    public void onDownloadCompleted() {
+        setDialog(false);
+        onError("Download Completed");
+//        mHandler.setSubtitle(new FileInputStream());
+    }
+
+    @Override
+    public void onDownloadFailed() {
+        setDialog(false);
+        onError("Download Fail");
+    }
+
+    @Override
+    public void onDownloadProgress(int progress) {
+        setDialogPercent(progress);
     }
 }

@@ -1,6 +1,6 @@
 package com.nklight.ultsub.FloatBuble;
 
-import android.util.Log;
+import com.nklight.ultsub.Utils.LogUtils;
 
 public class FloatingBubbleLogger {
     private boolean isDebugEnabled;
@@ -23,13 +23,13 @@ public class FloatingBubbleLogger {
 
     public void log(String message) {
         if (isDebugEnabled) {
-            Log.d(tag, message);
+            LogUtils.d(tag, message);
         }
     }
 
     public void log(String message, Throwable throwable) {
         if (isDebugEnabled) {
-            Log.e(tag, message, throwable);
+            LogUtils.e(tag, message, throwable);
         }
     }
 }

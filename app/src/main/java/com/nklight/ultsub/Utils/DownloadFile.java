@@ -2,7 +2,6 @@ package com.nklight.ultsub.Utils;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -71,7 +70,7 @@ public class DownloadFile extends AsyncTask<String, String, String> {
             input.close();
 
         } catch (Exception e) {
-            Log.e("Error: ", e.getMessage());
+            LogUtils.e("Error: ", e.getMessage());
             listener.onFail(e);
         }
 
@@ -83,6 +82,7 @@ public class DownloadFile extends AsyncTask<String, String, String> {
      * */
     protected void onProgressUpdate(String... progress) {
         // setting progress percentage
+        listener.onProgressUpdate(progress[0]);
     }
 
     /**

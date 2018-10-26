@@ -10,4 +10,16 @@ public class LogUtils {
             Log.d(tag, log);
         }
     }
+
+    public static void e(String tag, String log) {
+        if (BuildConfig.isLogEnable) {
+            Log.e(tag, log);
+        }
+    }
+
+    public static void e(String tag, String log, Throwable throwable) {
+        if (BuildConfig.isLogEnable) {
+            Log.e(tag, log, throwable);
+        }
+    }
 }

@@ -120,8 +120,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeViewOld() {
         btnCreate.setOnClickListener({
-            startService(Intent(this@MainActivity, UltSubService::class.java))
-            finish()
+            try {
+                startService(Intent(this@MainActivity, UltSubService::class.java))
+                finish()
+            } catch (e:Exception) {
+                showToast("can't start service\n" + e.message)
+            }
         })
     }
 
