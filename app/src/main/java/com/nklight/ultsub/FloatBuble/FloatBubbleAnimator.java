@@ -6,7 +6,7 @@ import android.view.WindowManager;
 
 import com.nklight.ultsub.Utils.LogUtils;
 
-public class FloatingBubbleAnimator {
+public class FloatBubbleAnimator {
 
     private static final int ANIMATION_TIME = 100;
     private static final int ANIMATION_STEPS = 5;
@@ -17,7 +17,7 @@ public class FloatingBubbleAnimator {
     private int sizeX;
     private int sizeY;
 
-    private FloatingBubbleAnimator(Builder builder) {
+    private FloatBubbleAnimator(Builder builder) {
         bubbleView = builder.bubbleView;
         bubbleParams = builder.bubbleParams;
         windowManager = builder.windowManager;
@@ -50,7 +50,7 @@ public class FloatingBubbleAnimator {
 
                     windowManager.updateViewLayout(bubbleView, bubbleParams);
                 } catch (Exception exception) {
-                    LogUtils.e(FloatingBubbleAnimator.class.getSimpleName(), exception.getMessage());
+                    LogUtils.e(FloatBubbleAnimator.class.getSimpleName(), exception.getMessage());
                 }
             }
         });
@@ -92,8 +92,8 @@ public class FloatingBubbleAnimator {
             return this;
         }
 
-        public FloatingBubbleAnimator build() {
-            return new FloatingBubbleAnimator(this);
+        public FloatBubbleAnimator build() {
+            return new FloatBubbleAnimator(this);
         }
     }
 }

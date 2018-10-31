@@ -4,19 +4,19 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.view.Gravity;
 
-import com.nklight.ultsub.FloatBuble.FloatingBubbleConfig;
-import com.nklight.ultsub.FloatBuble.FloatingBubbleService;
+import com.nklight.ultsub.FloatBuble.FloatBubbleConfig;
+import com.nklight.ultsub.FloatBuble.FloatBubbleService;
 import com.nklight.ultsub.SubView.SubView;
 
-public class UltSubService extends FloatingBubbleService {
+public class UltSubService extends FloatBubbleService {
     @Override
-    protected FloatingBubbleConfig getConfig() {
-        return new FloatingBubbleConfig.Builder()
+    protected FloatBubbleConfig getConfig() {
+        return new FloatBubbleConfig.Builder()
                 // Set the drawable for the bubble
                 .bubbleIcon(getDrawable(R.drawable.ic_sub_round))
 
                 // Set the drawable for the remove bubble
-                .removeBubbleIcon(getDrawable(R.drawable.triangle_icon))
+                .removeBubbleIcon(getDrawable(R.drawable.ic_close))
 
                 // Set the size of the bubble in dp
                 .bubbleIconDp(45)
@@ -37,10 +37,10 @@ public class UltSubService extends FloatingBubbleService {
                 .expandableColor(Color.TRANSPARENT)
 
                 // The color of the triangular layout
-                .triangleColor(Color.GREEN)
+                .triangleColor(R.color.transparent)
 
                 // Horizontal gravity of the bubble when expanded
-                .gravity(Gravity.END)
+                .gravity(Gravity.START)
 
                 // The view which is visible in the expanded view
                 .expandableView(new SubView(getContext()))

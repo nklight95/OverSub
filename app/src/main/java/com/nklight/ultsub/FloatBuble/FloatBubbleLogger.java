@@ -2,21 +2,21 @@ package com.nklight.ultsub.FloatBuble;
 
 import com.nklight.ultsub.Utils.LogUtils;
 
-public class FloatingBubbleLogger {
+public class FloatBubbleLogger {
     private boolean isDebugEnabled;
     private String tag;
 
-    public FloatingBubbleLogger() {
+    public FloatBubbleLogger() {
         isDebugEnabled = false;
-        tag = FloatingBubbleLogger.class.getSimpleName();
+        tag = FloatBubbleLogger.class.getSimpleName();
     }
 
-    public FloatingBubbleLogger setTag(String tag) {
+    public FloatBubbleLogger setTag(String tag) {
         this.tag = tag;
         return this;
     }
 
-    public FloatingBubbleLogger setDebugEnabled(boolean enabled) {
+    public FloatBubbleLogger setDebugEnabled(boolean enabled) {
         this.isDebugEnabled = enabled;
         return this;
     }

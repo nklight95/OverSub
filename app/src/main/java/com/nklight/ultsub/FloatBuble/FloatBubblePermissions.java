@@ -7,7 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 
-public class FloatingBubblePermissions {
+public class FloatBubblePermissions {
 
     public static final Integer REQUEST_CODE_ASK_PERMISSIONS = 1201;
 

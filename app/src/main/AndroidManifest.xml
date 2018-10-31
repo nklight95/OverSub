@@ -9,34 +9,46 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".UltApp"
         android:allowBackup="true"
+        android:appComponentFactory="@string/action_settings"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        android:theme="@style/AppTheme"
+        tools:replace="android:appComponentFactory">
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_sub_round" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".MainActivity">
+
         </activity>
-        <!--<service-->
-        <!--android:name=".PlayService"-->
-        <!--android:enabled="true"-->
-        <!--android:exported="false"/>-->
-        <!--<service-->
-            <!--android:name=".FloatBuble.FloatingBubbleService"-->
-            <!--android:enabled="true"-->
-            <!--android:exported="false" />-->
+
         <service android:name=".UltSubService">
             <intent-filter>
                 <action android:name="android.intent.action.CONFIGURATION_CHANGED" />
             </intent-filter>
         </service>
-        <service android:name=".Utils.DownloadWithUnzip"
+        <service
+            android:name=".Utils.DownloadWithUnzip"
             tools:ignore="InnerclassSeparator" />
+        <service
+            android:name=".Utils.UltFirebaseMessagingService"
+            tools:ignore="InnerclassSeparator">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".SplashActivity"
+            android:theme="@style/FullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

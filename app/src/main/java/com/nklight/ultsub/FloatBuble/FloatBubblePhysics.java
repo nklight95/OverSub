@@ -6,19 +6,19 @@ import android.view.WindowManager;
 
 import com.nklight.ultsub.Utils.LogUtils;
 
-public class FloatingBubblePhysics extends DefaultFloatingBubbleTouchListener {
+public class FloatBubblePhysics extends DefaultFloatBubbleTouchListener {
 
     private int sizeX;
     private int sizeY;
     private View bubbleView;
     private WindowManager windowManager;
-    private FloatingBubbleConfig config;
+    private FloatBubbleConfig config;
 
     private WindowManager.LayoutParams bubbleParams;
-    private FloatingBubbleAnimator animator;
+    private FloatBubbleAnimator animator;
     private Point[] previous = {null, null};
 
-    private FloatingBubblePhysics(Builder builder) {
+    private FloatBubblePhysics(Builder builder) {
         sizeX = builder.sizeX;
         sizeY = builder.sizeY;
         bubbleView = builder.bubbleView;
@@ -26,7 +26,7 @@ public class FloatingBubblePhysics extends DefaultFloatingBubbleTouchListener {
         config = builder.config;
 
         bubbleParams = (WindowManager.LayoutParams) bubbleView.getLayoutParams();
-        animator = new FloatingBubbleAnimator.Builder()
+        animator = new FloatBubbleAnimator.Builder()
                 .bubbleParams(bubbleParams)
                 .bubbleView(bubbleView)
                 .sizeX(sizeX)
@@ -51,7 +51,7 @@ public class FloatingBubblePhysics extends DefaultFloatingBubbleTouchListener {
     @Override
     public void onUp(float x, float y) {
         addSelectively(x, y);
-        LogUtils.d(FloatingBubblePhysics.class.getSimpleName(), previous.toString());
+        LogUtils.d(FloatBubblePhysics.class.getSimpleName(), previous.toString());
 
         if (previous[0] == null) {
             moveToCorner();
@@ -98,7 +98,7 @@ public class FloatingBubblePhysics extends DefaultFloatingBubbleTouchListener {
         private int sizeY;
         private View bubbleView;
         private WindowManager windowManager;
-        private FloatingBubbleConfig config;
+        private FloatBubbleConfig config;
 
         public Builder() {
         }
@@ -123,13 +123,13 @@ public class FloatingBubblePhysics extends DefaultFloatingBubbleTouchListener {
             return this;
         }
 
-        public Builder config(FloatingBubbleConfig val) {
+        public Builder config(FloatBubbleConfig val) {
             config = val;
             return this;
         }
 
-        public FloatingBubblePhysics build() {
-            return new FloatingBubblePhysics(this);
+        public FloatBubblePhysics build() {
+            return new FloatBubblePhysics(this);
         }
     }
 }

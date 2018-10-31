@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 
-public class FloatingBubbleTouch implements View.OnTouchListener {
+public class FloatBubbleTouch implements View.OnTouchListener {
 
     private static final int TOUCH_CLICK_TIME = 250;
     private static final float EXPANSION_FACTOR = 1.25f;
@@ -18,10 +18,10 @@ public class FloatingBubbleTouch implements View.OnTouchListener {
     private View removeBubbleView;
     private View expandableView;
     private WindowManager windowManager;
-    private FloatingBubbleTouchListener listener;
-    private FloatingBubbleTouchListener physics;
+    private FloatBubbleTouchListener listener;
+    private FloatBubbleTouchListener physics;
     private int removeBubbleSize;
-    private FloatingBubbleConfig config;
+    private FloatBubbleConfig config;
     private int padding;
     private int marginBottom;
 
@@ -30,13 +30,13 @@ public class FloatingBubbleTouch implements View.OnTouchListener {
     private WindowManager.LayoutParams expandableParams;
     private int removeBubbleStartSize;
     private int removeBubbleExpandedSize;
-    private FloatingBubbleAnimator animator;
+    private FloatBubbleAnimator animator;
 
     private long touchStartTime = 0;
     private long lastTouchTime = 0;
     private boolean expanded = false;
 
-    private FloatingBubbleTouch(Builder builder) {
+    private FloatBubbleTouch(Builder builder) {
         padding = builder.padding;
         config = builder.config;
         removeBubbleSize = builder.removeBubbleSize;
@@ -55,7 +55,7 @@ public class FloatingBubbleTouch implements View.OnTouchListener {
         expandableParams = (WindowManager.LayoutParams) expandableView.getLayoutParams();
         removeBubbleStartSize = removeBubbleSize;
         removeBubbleExpandedSize = (int) (EXPANSION_FACTOR * removeBubbleSize);
-        animator = new FloatingBubbleAnimator.Builder()
+        animator = new FloatBubbleAnimator.Builder()
                 .sizeX(sizeX)
                 .sizeY(sizeY)
                 .windowManager(windowManager)
@@ -239,12 +239,12 @@ public class FloatingBubbleTouch implements View.OnTouchListener {
         private View bubbleView;
         private View removeBubbleView;
         private View expandableView;
-        private FloatingBubbleLogger logger;
+        private FloatBubbleLogger logger;
         private WindowManager windowManager;
-        private FloatingBubbleTouchListener listener;
+        private FloatBubbleTouchListener listener;
         private int removeBubbleSize;
-        private FloatingBubbleTouchListener physics;
-        private FloatingBubbleConfig config;
+        private FloatBubbleTouchListener physics;
+        private FloatBubbleConfig config;
         private int padding;
         private int marginBottom;
 
@@ -276,7 +276,7 @@ public class FloatingBubbleTouch implements View.OnTouchListener {
             return this;
         }
 
-        public Builder logger(FloatingBubbleLogger val) {
+        public Builder logger(FloatBubbleLogger val) {
             logger = val;
             return this;
         }
@@ -286,8 +286,8 @@ public class FloatingBubbleTouch implements View.OnTouchListener {
             return this;
         }
 
-        public FloatingBubbleTouch build() {
-            return new FloatingBubbleTouch(this);
+        public FloatBubbleTouch build() {
+            return new FloatBubbleTouch(this);
         }
 
         public Builder removeBubbleSize(int val) {
@@ -295,17 +295,17 @@ public class FloatingBubbleTouch implements View.OnTouchListener {
             return this;
         }
 
-        public Builder physics(FloatingBubbleTouchListener val) {
+        public Builder physics(FloatBubbleTouchListener val) {
             physics = val;
             return this;
         }
 
-        public Builder listener(FloatingBubbleTouchListener val) {
+        public Builder listener(FloatBubbleTouchListener val) {
             listener = val;
             return this;
         }
 
-        public Builder config(FloatingBubbleConfig val) {
+        public Builder config(FloatBubbleConfig val) {
             config = val;
             return this;
         }

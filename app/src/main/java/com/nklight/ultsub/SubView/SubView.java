@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -53,6 +55,7 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
     private ConstraintLayout containerButton;
     private ProgressDialog mProgressDialog;
     private AlertDialog mLinkDialog;
+    private String mFilePath;
 
 
     public SubView(Context context) {
@@ -156,7 +159,8 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
             }
         });
         mLinkDialog = builder.create();
-        mLinkDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        mLinkDialog.getWindow().setType(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ?
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY : WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
     }
 
     private void openInputLinkDialog() {
@@ -164,12 +168,19 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
         this.post(new Runnable() {
             @Override
             public void run() {
+                if (state.toggleFollow.isChecked()) {
+                    state.toggleFollow.performClick();
+                }
                 mLinkDialog.show();
             }
         });
     }
 
     private void downloadAndUnzip(String link) {
+        if (!URLUtil.isValidUrl(link)) {
+            onError("Not valid link");
+            return;
+        }
         DownloadWithUnzip.FileDownloader downloader = DownloadWithUnzip.FileDownloader.getInstance(createDownloadRequest(link), SubView.this);
         downloader.download(mContext);
     }
@@ -220,12 +231,25 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
         mProgressDialog.setTitle("Downloading");
         mProgressDialog.setMax(100);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        mProgressDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        mProgressDialog.getWindow().setType(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ?
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY : WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
     }
 
 
     @Override
     public void onTextChange(final String text, final String time) {
+        this.post(new Runnable() {
+            @Override
+            public void run() {
+                tvSub.setText(text);
+                tvTime.setText(time);
+
+            }
+        });
+    }
+
+    @Override
+    public void onTextChange(final int text, final String time) {
         this.post(new Runnable() {
             @Override
             public void run() {
@@ -245,6 +269,16 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
             }
         });
 
+    }
+
+    @Override
+    public void onError(final int error) {
+        this.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -269,7 +303,7 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
                     mHandler.setSubtitle(new FileInputStream(file), state);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    onError("Can't load subtitle!");
+                    onError(R.string.er_cant_load);
                 }
                 setDialog(false);
             }
@@ -277,7 +311,7 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
             @Override
             public void onFail(Exception e) {
                 LogUtils.d("DownloadError", e.getMessage());
-                onError("Can't load subtitle!");
+                onError(R.string.er_cant_load);
                 setDialog(false);
             }
 
@@ -295,6 +329,7 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
         File file = new File(path, fileName);
         String localPath = file.getAbsolutePath();
         String unzipPath = FileUtils.getDataDir(mContext, "ExtractSub").getAbsolutePath();
+        mFilePath = unzipPath;
         DownloadWithUnzip.DownloadRequest result = new DownloadWithUnzip.DownloadRequest(link, localPath);
         result.setRequiresUnzip(true);
         result.setDeleteZipAfterExtract(false);
@@ -310,14 +345,22 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
     @Override
     public void onDownloadCompleted() {
         setDialog(false);
-        onError("Download Completed");
-//        mHandler.setSubtitle(new FileInputStream());
+        onError(R.string.if_download_complete);
+        try {
+            File folder = new File(mFilePath);
+            File[] file = folder.listFiles();
+            inputStream = new FileInputStream(file[0]);
+            state = new State(0L, new ArrayList<Subtitle>(), new ArrayList<Timestamp>(), btnStart, timeLabel);
+            mHandler.setSubtitle(inputStream, state);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onDownloadFailed() {
         setDialog(false);
-        onError("Download Fail");
+        onError(R.string.if_download_fail);
     }
 
     @Override

@@ -192,13 +192,15 @@ public class DownloadWithUnzip extends IntentService {
     private void unzipEntry(ZipFile zipfile, ZipEntry entry, String outputDir) throws IOException {
 
         if (entry.isDirectory()) {
-            createDir(new File(outputDir, entry.getName()));
+            createDir(new File(outputDir, "currentSub.srt"));
             return;
         }
 
-        File outputFile = new File(outputDir, entry.getName());
+        File outputFile = new File(outputDir, "currentSub.srt");
         if (!outputFile.getParentFile().exists()) {
-            createDir(outputFile.getParentFile());
+//            createDir(outputFile.getParentFile());
+            outputFile.delete();
+            outputFile = new File(outputDir, "currentSub");
         }
 
         Log.v("ZIP E", "Extracting: " + entry);

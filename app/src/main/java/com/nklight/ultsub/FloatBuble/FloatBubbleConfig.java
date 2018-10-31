@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.nklight.ultsub.R;
 
-public class FloatingBubbleConfig {
+public class FloatBubbleConfig {
     private Drawable bubbleIcon;
     private Drawable removeBubbleIcon;
     private View expandableView;
@@ -23,7 +23,7 @@ public class FloatingBubbleConfig {
     private int borderRadiusDp;
     private boolean physicsEnabled;
 
-    private FloatingBubbleConfig(Builder builder) {
+    private FloatBubbleConfig(Builder builder) {
         bubbleIcon = builder.bubbleIcon;
         removeBubbleIcon = builder.removeBubbleIcon;
         expandableView = builder.expandableView;
@@ -52,7 +52,7 @@ public class FloatingBubbleConfig {
                 .gravity(Gravity.END);
     }
 
-    public static FloatingBubbleConfig getDefault(Context context) {
+    public static FloatBubbleConfig getDefault(Context context) {
         return getDefaultBuilder(context).build();
     }
 
@@ -156,8 +156,8 @@ public class FloatingBubbleConfig {
             return this;
         }
 
-        public FloatingBubbleConfig build() {
-            return new FloatingBubbleConfig(this);
+        public FloatBubbleConfig build() {
+            return new FloatBubbleConfig(this);
         }
 
         public Builder gravity(int val) {

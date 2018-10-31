@@ -12,4 +12,15 @@
     <string name="playing">Playing</string>
     <string name="_0_5">+0.5</string>
     <string name="__0_5">-0.5</string>
+    <string name="action_settings">action</string>
+    <string name="create_bubble">create bubble</string>
+    <string name="er_file_not_found">File not found</string>
+    <string name="er_cant_read">Can\'t read subtitle!</string>
+    <string name="txt_empty" />
+    <string name="er_not_found">Can\'t find subtitle</string>
+    <string name="er_something">Something wrong, please try again!</string>
+    <string name="er_cant_load">Can\'t load subtitle!</string>
+    <string name="if_download_complete">Download Completed</string>
+    <string name="if_download_fail">Download Fail</string>
+    <string name="er_permission_not_avaiable">Draw over other app permission not available. Must restart the application</string>
 </resources>

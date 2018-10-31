@@ -1,6 +1,6 @@
 package com.nklight.ultsub.FloatBuble;
 
-public interface FloatingBubbleTouchListener {
+public interface FloatBubbleTouchListener {
 
     void onDown(float x, float y);
 

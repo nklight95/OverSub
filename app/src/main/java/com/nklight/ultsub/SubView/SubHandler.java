@@ -3,9 +3,11 @@ package com.nklight.ultsub.SubView;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.StringRes;
 import android.view.View;
 import android.widget.ToggleButton;
 
+import com.nklight.ultsub.R;
 import com.nklight.ultsub.Subtitle.InvalidTimestampFormatException;
 import com.nklight.ultsub.Subtitle.Subtitle;
 import com.nklight.ultsub.Subtitle.SubtitleFile;
@@ -25,22 +27,22 @@ public class SubHandler extends Handler {
 
     private SubHandlerListener mListener;
     private Context mContext;
-    private InputStream inputStream;
-    private SubtitleFile subtitleFile;
-    private ArrayList<Subtitle> subsWithPadding = new ArrayList<>();
-    private Timer mTimer;
+    private InputStream mInputStream;
+    private SubtitleFile mSubtitleFile;
+    private ArrayList<Subtitle> mSubsWithPadding = new ArrayList<>();
     private ToggleButton play;
     // state
-    private Long offsetoffsetMillis;
-    private ArrayList<Subtitle> subtitles = new ArrayList<>();
-    private ArrayList<Timestamp> startingTimestamps = new ArrayList<>();
     private State state;
     private String timeLabel;
 
     interface SubHandlerListener {
         void onTextChange(String text, String time);
 
+        void onTextChange(@StringRes int text, String time);
+
         void onError(String error);
+
+        void onError(@StringRes int error);
 
         void onTextChange(List<String> texts, String time);
     }
@@ -53,36 +55,27 @@ public class SubHandler extends Handler {
         this.timeLabel = timeLabel;
     }
 
-    private void initTimer() {
-        mTimer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                Timestamp timestamp = Timestamp.Companion.fromTotalMillis(System.currentTimeMillis() - offsetoffsetMillis);
-                LogUtils.d("timestamp", timestamp.compile());
-            }
-        };
-    }
 
     public void setSubtitle(InputStream inputStream, State state) {
-        this.inputStream = inputStream;
+        this.mInputStream = inputStream;
         try {
-            this.subtitleFile = new SubtitleFile(inputStream);
+            this.mSubtitleFile = new SubtitleFile(inputStream);
         } catch (IOException e) {
-            mListener.onError("File not found");
+            mListener.onError(R.string.er_file_not_found);
         } catch (InvalidTimestampFormatException e) {
-            mListener.onError("Some line not right!");
-            //continue
+            mListener.onError(R.string.er_cant_read);
+            return;
         }
+        mSubsWithPadding.clear();
 
-        subsWithPadding.add(new Subtitle(
+        mSubsWithPadding.add(new Subtitle(
                 Timestamp.Companion.fromTotalMillis(0),
                 Timestamp.Companion.fromTotalMillis(0),
                 Collections.nCopies(30, "")));
 
-        subsWithPadding.addAll(subtitleFile.getSubtitles());
+        mSubsWithPadding.addAll(mSubtitleFile.getSubtitles());
         state.subtitles.clear();
-        state.subtitles.addAll(subsWithPadding);
+        state.subtitles.addAll(mSubsWithPadding);
         for (Subtitle sub : state.subtitles) {
             state.startingTimestamps.add(sub.getStartTime());
         }
@@ -97,23 +90,23 @@ public class SubHandler extends Handler {
             Timestamp timestamp = Timestamp.Companion.fromTotalMillis(System.currentTimeMillis() - state.offsetMillis);
             timeLabel = timestamp.compile();
             state.timeLabel = timeLabel;
-            mListener.onTextChange("", timeLabel);
+            mListener.onTextChange(R.string.txt_empty, timeLabel);
         }
     }
 
     public void start() {
-        if (inputStream == null && mListener == null) return;
+        if (mInputStream == null && mListener == null) return;
 
 
     }
 
     private void init(final State state) {
         this.state = state;
-        if (inputStream == null) {
-            mListener.onError("Can't find subtitle");
+        if (mInputStream == null) {
+            mListener.onError(R.string.er_not_found);
             return;
         }
-//        setSubtitle(inputStream, state);
+
         // load sub to state
         final Timer[] timer = {null};
 
@@ -129,7 +122,6 @@ public class SubHandler extends Handler {
                             // set time to show = timestamp.compile()
                             timeLabel = timestamp.compile();
                             state.timeLabel = timeLabel;
-                            LogUtils.d("ohcaidcm", "time =" + timeLabel);
                             int binSearchIndex = Collections.binarySearch(state.startingTimestamps, timestamp);
                             int subtitleToScrollTo;
                             if (binSearchIndex > 0) {
@@ -149,15 +141,14 @@ public class SubHandler extends Handler {
                             Subtitle currentSub = state.subtitles.get(subtitleToScrollTo);
                             double progress = (1.0 * (timestamp.getTotalMillis() - currentSub.getStartTime().getTotalMillis())
                                     / (currentSub.getEndTime().getTotalMillis() - currentSub.getStartTime().getTotalMillis()));
-                            if (progress > 1.0) {
-                                progress = 1.0;
-                                //TODO: hide sub
-                                mListener.onTextChange("", timeLabel);
-                                LogUtils.d("ohcaidcm", "text = notext");
+                            if (progress > 1.0 || progress < 0) {
+                                //hide sub
+                                mListener.onTextChange(R.string.txt_empty, timeLabel);
+                                LogUtils.d("showSub", "text = notext");
                             } else {
-                                //TODO: show sub
+                                //show sub
                                 mListener.onTextChange(currentSub.getLines(), timeLabel);
-                                LogUtils.d("ohcaidcm", "text = " + Utils.joinToString(currentSub.getLines()));
+                                LogUtils.d("showSub", "text = " + Utils.joinToString(currentSub.getLines()));
                             }
                         }
                     };
@@ -167,7 +158,7 @@ public class SubHandler extends Handler {
                         state.offsetMillis = System.currentTimeMillis() - new Timestamp(state.timeLabel).getTotalMillis();
                     } catch (InvalidTimestampFormatException e) {
                         e.printStackTrace();
-                        mListener.onError("set state.offsetMillis fail");
+                        mListener.onError(R.string.er_something);
                         LogUtils.d("Error", "set state.offsetMillis fail");
                     }
 

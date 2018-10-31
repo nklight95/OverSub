@@ -27,13 +27,19 @@ class SubtitleFile {
             /* We assign our own ID's, ignore the ID given in the file. */
             do {
                 val idOrEmpty = scanner.nextLine()
+                LogUtils.d("LoadSub", "idOrEmpty :" + idOrEmpty)
             } while (idOrEmpty.trim().isEmpty())
-
             /* Read the Timestamps from the file. */
-            val timestamps = scanner.nextLine().split(" --> ".toRegex())
+            var timestamps : List<String>
+            try {
+                timestamps = scanner.nextLine().split(" --> ".toRegex())
+            } catch (e : InvalidTimestampFormatException) {
+                LogUtils.d("InvalidTimestampFormatException", "InvalidTimestampFormatException")
+                continue
+            }
             if (timestamps.size != 2) {
                 LogUtils.d("InvalidTimestampFormatException", "InvalidTimestampFormatException")
-//                throw InvalidTimestampFormatException()
+                continue
             }
 
             val startTime = Timestamp(timestamps[0])

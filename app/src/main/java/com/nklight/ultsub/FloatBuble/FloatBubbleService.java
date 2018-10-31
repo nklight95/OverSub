@@ -23,13 +23,13 @@ import android.widget.LinearLayout;
 import com.nklight.ultsub.R;
 import com.nklight.ultsub.Utils.LogUtils;
 
-public class FloatingBubbleService extends Service {
+public class FloatBubbleService extends Service {
 
-    protected static final String TAG = FloatingBubbleService.class.getSimpleName();
+    protected static final String TAG = FloatBubbleService.class.getSimpleName();
 //    private static final String BROADCAST_CONFIG_CHANGED = "android.intent.action.CONFIGURATION_CHANGED";
 
     // Constructor Variable
-    protected FloatingBubbleLogger logger;
+    protected FloatBubbleLogger logger;
 
     // The Window Manager View
     protected WindowManager windowManager;
@@ -49,14 +49,14 @@ public class FloatingBubbleService extends Service {
     protected WindowManager.LayoutParams removeBubbleParams;
     protected WindowManager.LayoutParams expandableParams;
 
-    private FloatingBubbleConfig config;
-    private FloatingBubblePhysics physics;
-    private FloatingBubbleTouch touch;
+    private FloatBubbleConfig config;
+    private FloatBubblePhysics physics;
+    private FloatBubbleTouch touch;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        logger = new FloatingBubbleLogger().setDebugEnabled(true).setTag(TAG);
+        logger = new FloatBubbleLogger().setDebugEnabled(true).setTag(TAG);
 //        IntentFilter filter = new IntentFilter();
 //        filter.addAction(BROADCAST_CONFIG_CHANGED);
 //        this.registerReceiver(mBroadcastReceiver, filter);
@@ -146,7 +146,7 @@ public class FloatingBubbleService extends Service {
         expandableView.setLayoutParams(expandableParams);
 
         //
-        physics = new FloatingBubblePhysics.Builder()
+        physics = new FloatBubblePhysics.Builder()
                 .sizeX(windowSize.x)
                 .sizeY(windowSize.y)
                 .bubbleView(bubbleView)
@@ -154,7 +154,7 @@ public class FloatingBubbleService extends Service {
                 .windowManager(windowManager)
                 .build();
 
-        touch = new FloatingBubbleTouch.Builder()
+        touch = new FloatBubbleTouch.Builder()
                 .sizeX(windowSize.x)
                 .sizeY(windowSize.y)
                 .listener(getTouchListener())
@@ -248,7 +248,7 @@ public class FloatingBubbleService extends Service {
             params.leftMargin = dpToPixels((config.getBubbleIconDp() - 16) / 2);
             params.rightMargin = dpToPixels((config.getBubbleIconDp() - 16) / 2);
 
-            triangle.setVisibility(View.VISIBLE);
+            triangle.setVisibility(View.GONE);
             container.setVisibility(View.VISIBLE);
             card.setVisibility(View.VISIBLE);
 
@@ -267,15 +267,15 @@ public class FloatingBubbleService extends Service {
      *
      * @return the config
      */
-    protected FloatingBubbleConfig getConfig() {
-        return FloatingBubbleConfig.getDefault(getContext());
+    protected FloatBubbleConfig getConfig() {
+        return FloatBubbleConfig.getDefault(getContext());
     }
 
     /**
      * Sets the touch listener
      */
     protected void setTouchListener() {
-        physics = new FloatingBubblePhysics.Builder()
+        physics = new FloatBubblePhysics.Builder()
                 .sizeX(windowSize.x)
                 .sizeY(windowSize.y)
                 .bubbleView(bubbleView)
@@ -283,7 +283,7 @@ public class FloatingBubbleService extends Service {
                 .windowManager(windowManager)
                 .build();
 
-        touch = new FloatingBubbleTouch.Builder()
+        touch = new FloatBubbleTouch.Builder()
                 .sizeX(windowSize.x)
                 .sizeY(windowSize.y)
                 .listener(getTouchListener())
@@ -306,8 +306,8 @@ public class FloatingBubbleService extends Service {
      *
      * @return the touch listener
      */
-    public FloatingBubbleTouchListener getTouchListener() {
-        return new DefaultFloatingBubbleTouchListener() {
+    public FloatBubbleTouchListener getTouchListener() {
+        return new DefaultFloatBubbleTouchListener() {
             @Override
             public void onRemove() {
                 stopSelf();
