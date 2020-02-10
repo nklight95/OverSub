@@ -55,17 +55,19 @@ class MainActivity : AppCompatActivity() {
         btnCreate.setOnClickListener({
             try {
                 if (checkPermission()) {
-                    startService(Intent(this@MainActivity, UltSubService::class.java))
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-////                        startForegroundService()
-//                    }
-
+                    startService()
                     finish()
                 }
             } catch (e: Exception) {
                 showToast("Can't start service\n" + e.message)
             }
         })
+    }
+
+    private fun startService() {
+        val i = Intent(this@MainActivity, UltSubService::class.java)
+        i.putExtra(UltSubService.BUBBLE_SIZE_KEY, 55)
+        startService(i)
     }
 
     private fun testTimer() {

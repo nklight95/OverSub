@@ -23,4 +23,5 @@
     <string name="if_download_complete">Download Completed</string>
     <string name="if_download_fail">Download Fail</string>
     <string name="er_permission_not_avaiable">Draw over other app permission not available. Must restart the application</string>
+    <string name="downloading">Downloading</string>
 </resources>

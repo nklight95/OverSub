@@ -1,5 +1,6 @@
 package com.nklight.ultsub;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.view.Gravity;
@@ -9,6 +10,21 @@ import com.nklight.ultsub.FloatBuble.FloatBubbleService;
 import com.nklight.ultsub.SubView.SubView;
 
 public class UltSubService extends FloatBubbleService {
+
+    public static final String BUBBLE_SIZE_KEY = "bubbleSizeKey";
+    private int bubbleSize = 50;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        bubbleSize = intent.getIntExtra(BUBBLE_SIZE_KEY, 50);
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     @Override
     protected FloatBubbleConfig getConfig() {
         return new FloatBubbleConfig.Builder()
@@ -19,7 +35,7 @@ public class UltSubService extends FloatBubbleService {
                 .removeBubbleIcon(getDrawable(R.drawable.ic_close))
 
                 // Set the size of the bubble in dp
-                .bubbleIconDp(45)
+                .bubbleIconDp(bubbleSize)
 
                 // Set the size of the remove bubble in dp
                 .removeBubbleIconDp(52)

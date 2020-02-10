@@ -9,12 +9,14 @@ import android.os.Looper;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.URLUtil;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +46,7 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
     private String timeLabel;
     private HtmlTextView tvSub;
     private ToggleButton btnStart;
+    private ToggleButton btnTextBackground;
     private SubHandler mHandler;
     private InputStream inputStream;
     private State state;
@@ -106,6 +109,18 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
         tvTime = findViewById(R.id.textView2);
         parentLayout = findViewById(R.id.parent);
         containerButton = findViewById(R.id.buttonContainer);
+        btnTextBackground = findViewById(R.id.btnTextBackground);
+
+        btnTextBackground.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked) {
+                    tvSub.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.gray_background_trans, null));
+                } else  {
+                    tvSub.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.transparent, null));
+                }
+            }
+        });
 
         parentLayout.setOnClickListener(new OnClickListener() {
             @Override
@@ -228,7 +243,7 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
 
     private void createProgressDialog() {
         mProgressDialog = new ProgressDialog(mContext);
-        mProgressDialog.setTitle("Downloading");
+        mProgressDialog.setTitle(R.string.downloading);
         mProgressDialog.setMax(100);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.getWindow().setType(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ?
@@ -293,6 +308,7 @@ public class SubView extends CompoundViewHelper.ConstraintLayout implements SubH
 
     }
 
+    @SuppressWarnings("unused")
     private void getSubFromUrl(String url) {
         setDialog(true);
         DownloadFile downLoadFile = new DownloadFile(mContext, new DownloadCallback() {
